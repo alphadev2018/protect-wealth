@@ -75,7 +75,7 @@ module.exports.getCourses = async function (req, res) {
 
       if (!indexes.length) {
         data.continue = [];
-        res.status(201).json({success: true, data: data})
+        return res.status(201).json({success: true, data: data})
       }
       if (!indexes.length > 4) {
         indexes.slice(indexex.length - 4);
