@@ -18,7 +18,7 @@ module.exports.update = function (req, res) {
     AccountSchema.findOne({ '_id': req.body.user.userId }, async function (err, user) {
         var accountDoc = await AccountSchema.findOne({'email': userInfo.email});
         if (user.email !== userInfo.email && accountDoc === null) {
-            return res.status(201).json({success: false, message: "Account is already exist"});
+            return res.status(201).json({success: false, message: "Same eamil address already exist"});
         }
 
         AccountSchema.update({ '_id': req.body.user.userId }, userInfo, function (err, doc) {
@@ -42,10 +42,10 @@ module.exports.checkPassword = function (req, res) {
             return res.status(201).json({success: false, message: "Password is wrong"});
         }
 
-        var accountDoc = await AccountSchema.findOne({'email': req.body.model.email});
+        /*var accountDoc = await AccountSchema.findOne({'email': req.body.model.email});
         if (user.email !== req.body.model.email && accountDoc !== null) {
             return res.status(201).json({success: false, message: "Email address is already exist"});
-        }
+        }*/
 
         return res.status(201).json({success: true});
     });
