@@ -3,7 +3,9 @@ mongoose.Promise = global.Promise;
 
 mongoose.connect(process.env.MONGOURL, {
     useMongoClient: true,
-    autoIndex: false
+    autoIndex: false,
+    user: "admin",
+    password: "password"
     // other options 
 });
 
