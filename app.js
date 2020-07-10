@@ -25,18 +25,15 @@ var cookieParser = require('cookie-parser');
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        if (req.query.mode === 'coverimage') {
-            if (!fs.existsSync(__dirname+'/public/uploads/'+req.query.courseId)) {
-                fs.mkdirSync(__dirname+'/public/uploads/'+req.query.courseId);
-            }
+        if (req.query.courseId && !fs.existsSync(__dirname+'/public/uploads/'+req.query.courseId)) {
+            fs.mkdirSync(__dirname+'/public/uploads/'+req.query.courseId);
+        }
+        if (req.query.mode === 'coverimage') {            
             if (fs.existsSync(__dirname+'/public/uploads/'+req.query.courseId+'/cover.png')) {
                 fs.unlinkSync(__dirname+'/public/uploads/'+req.query.courseId+'/cover.png');
             }
             cb(null, './public/uploads/'+req.query.courseId);
-        } if (req.query.mode === 'video') {
-            if (!fs.existsSync(__dirname+'/public/uploads/'+req.query.courseId)) {
-                fs.mkdirSync(__dirname+'/public/uploads/'+req.query.courseId);
-            }
+        } if (req.query.mode === 'video' || req.query.mode === 'section') {
             cb(null, './public/uploads/'+req.query.courseId);
         } else {
             cb(null, './public/uploads/');
@@ -124,4 +121,4 @@ app.get("*", function(req, res) {
 });
 
 // web server 8080
-app.listen(80, () => console.log('-- [ PROTECTWEALTH NODE ] SERVER STARTED LISTENING ON PORT 80 --'));
+app.listen(8888, () => console.log('-- [ PROTECTWEALTH NODE ] SERVER STARTED LISTENING ON PORT 8888 --'));
