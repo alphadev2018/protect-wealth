@@ -12,6 +12,10 @@ module.exports.update = function (req, res) {
         account_status: req.body.user.accountStatus
     };
 
+    if (req.body.user.avatar) {
+        userInfo.avatar = req.body.user.avatar;
+    }
+
     var query = { '_id': req.body.user.userId }
 
 
@@ -276,8 +280,8 @@ module.exports.addAccountData = async function (req, res) {
             email :     req.body.newAccount.email || null,
             password:   hash,
             role: req.body.newAccount.role == '' ? 'user' : req.body.newAccount.role,
-            token: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
             account_status:   req.body.newAccount.account_status == '' ? "Active" : req.body.newAccount.account_status,
+            token: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
             start_time: req.body.newAccount.start_time,
             end_time: req.body.newAccount.end_time,
         }
