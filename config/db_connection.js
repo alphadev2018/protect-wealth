@@ -8,7 +8,7 @@ mongoose.connect(process.env.MONGOURL, {
 });
 
 const db_collections = [
-    "data_accounts", "data_courses", "data_activities", "data_contacts"
+    "data_accounts", "data_courses", "data_activities", "data_contacts", "data_quizs"
 ];
 
 mongoose.connection.once('open', function(){

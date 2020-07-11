@@ -16,6 +16,9 @@ module.exports.update = function (req, res) {
     if (req.body.user.avatar) {
         userInfo.avatar = req.body.user.avatar;
     }
+    if (req.body.user.quiz) {
+        userInfo.quiz = req.body.user.quiz;
+    }
 
     var query = { '_id': req.body.user.userId }
 
@@ -340,5 +343,19 @@ module.exports.addContact = function (req, res) {
         }
         res.status(201).json({success: true, doc: doc});
     });
+    
+}
+
+module.exports.setQuiz = function (req, res) {
+    var data = {
+        quiz: req.body.quiz
+    }
+
+    AccountSchema.update({ '_id': req.body.userId }, data, function (err, doc) {
+        if (err) {
+            return res.status(201).json({success: false, error: err});
+        }
+        res.status(201).json({success: true, doc: doc});
+    })
     
 }

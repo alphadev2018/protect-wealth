@@ -1,7 +1,38 @@
+var AccountSchema = require('../schemas/account_schema.js');
 var ActivitySchema = require('../schemas/activity_schema.js');
 var CourseSchema = require('../schemas/courses_schema.js');
+var QuizSchema = require('../schemas/quizs_schema.js');
 var jwt = require('jsonwebtoken');
 var fs = require('fs')
+
+function intersect(a, b) {
+  var t;
+  if (b.length > a.length) t = b, b = a, a = t; // indexOf to loop over shorter
+  return a.filter(function (e) {
+      return b.indexOf(e) > -1;
+  });
+}
+
+async function getRecommend( userId, limit ) {
+  var user = await AccountSchema.findOne({ '_id': userId });
+  var courses = await CourseSchema.find();
+  var quiz = [];
+  var ret = [];
+
+  user.quiz.map((q, idx) => {
+    if (q >= 50) {
+      quiz.push(idx+1)
+    }
+  })
+
+  courses.map(course => {
+    var common = intersect(quiz, course.quizs);
+    if (!common.length) return;
+    ret.push(course);
+  })
+
+  return limit === -1 ? ret : ret.slice(0, limit);
+}
 
 module.exports.getCourses = async function (req, res) {
   var mode = req.query.mode;
@@ -50,7 +81,8 @@ module.exports.getCourses = async function (req, res) {
 
   } else if ( mode === 'recommended' ) {
 
-    res.status(201).json({success: true, doc: []})
+    var data = await getRecommend(req.query.userId, -1);
+    res.status(201).json({success: true, doc: data})
     
   } else if ( mode === 'home' ) {
 
@@ -58,7 +90,8 @@ module.exports.getCourses = async function (req, res) {
     data.recent = await CourseSchema.find().sort({
       "modified_at": -1
     }).limit(4);
-    data.recommended = await CourseSchema.find().limit(4);
+    data.recommended = await getRecommend(req.query.userId, 4);
+    data.all = await CourseSchema.find().limit(8);
 
     ActivitySchema.find({userId: req.query.userId}, async function (err, doc) {
       if (err) {
@@ -143,7 +176,12 @@ module.exports.removeCourse = function (req, res) {
         if (err) {
             return res.status(201).json({ success: false,  message: 'Error deleted' });
         }
-        fs.unlinkSync(__dirname+'/../../public/uploads/'+req.body.courseId);
+        try {          
+            fs.unlinkSync(__dirname+'/../../public/uploads/'+req.body.courseId);
+        } catch (e) {
+
+        }
+        
         res.status(201).json({ success: true, message: 'Successfully deleted' });
     });
   });
@@ -212,71 +250,7 @@ module.exports.removeContent = function (req, res) {
   })
 }
 
-module.exports.home = function (req, res) {
-
-  res.status(201).json({
-
-    recommended : [
-      {
-          _id: 1,
-          background: '#fee2de',
-          img: 's1.png',
-          name: 'Basic Grammers',
-          count: 15
-      },
-      {
-          _id: 2,
-          background: '#feddee',
-          img: 's2.png',
-          name: 'Higher Study',
-          count: 15
-      },
-      {
-          _id: 3,
-          background: '#dad5fe',
-          img: 's3.png',
-          name: 'Machine Learning',
-          count: 15
-      },
-      {
-          _id: 4,
-          background: '#dbffd9',
-          img: 's4.png',
-          name: 'Pharmacy',
-          count: 15
-      }
-    ],
-
-    recent: [
-      {
-          _id: 5,
-          background: '#fee2de',
-          img: 'course1.png',
-          name: 'Art Illustration',
-          count: 15
-      },
-      {
-          _id: 6,
-          background: '#feddee',
-          img: 'course2.png',
-          name: 'The Management',
-          count: 15
-      },
-      {
-          _id: 7,
-          background: '#dad5fe',
-          img: 'course3.png',
-          name: 'Digital Marketing',
-          count: 15
-      },
-      {
-          _id: 8,
-          background: '#dbffd9',
-          img: 'course4.png',
-          name: 'Web Development',
-          count: 15
-      }
-    ]
-  })
-
+module.exports.getQuizs = async function (req, res) {
+  var data = await QuizSchema.find();
+  res.status(201).json({success: true, data: data});
 }

@@ -39,5 +39,6 @@ router.post('/addAccountData', _account.addAccountData);
 router.post('/resetPassword', _account.resetPassword);
 
 router.post('/contact', _account.addContact);
+router.post('/setQuiz', _account.setQuiz)
 
 module.exports = router;

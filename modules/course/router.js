@@ -9,6 +9,7 @@ router.use(function timeLog (req, res, next) {
 });
 
 
+router.get('/quizs', _courses.getQuizs);
 router.get('/get', _courses.getCourses);
 router.get('/contents', _courses.getCourseById)
 router.post('/setimage', _courses.setCoverImage)

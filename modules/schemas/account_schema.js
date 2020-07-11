@@ -20,6 +20,7 @@ var accountSchema = new Schema({
     type: String,
     default: "user"
   },
+  quiz: Array,
   recommend: Number,
   token: String,
   avatar: String,
@@ -45,6 +46,7 @@ accountSchema.methods.generateJwt = function() {
     avatar : this.avatar,
     token: this.token,
     role: this.role,
+    quiz: this.quiz,
     exp: parseInt(expiry.getTime() / 1000),
   }, this.token);
 };

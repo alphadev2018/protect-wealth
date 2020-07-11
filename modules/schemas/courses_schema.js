@@ -10,6 +10,7 @@ var courseSchema = new Schema({
   slug: String,
   coverimage: String,
   description: String,
+  quizs: [],
   contents: [],
   modified_at: {
     type: Date,
