@@ -38,4 +38,6 @@ router.post('/getAccountDataById', _account.getAccountDataById)
 router.post('/addAccountData', _account.addAccountData);
 router.post('/resetPassword', _account.resetPassword);
 
+router.post('/contact', _account.addContact);
+
 module.exports = router;

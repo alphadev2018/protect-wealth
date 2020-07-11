@@ -1,4 +1,5 @@
 var AccountSchema = require('../schemas/account_schema.js');
+var ContactSchema = require('../schemas/contact_schema.js');
 
 var jwt = require('jsonwebtoken');
 
@@ -324,4 +325,20 @@ module.exports.resetPassword = async function (req, res) {
         console.log(error);
         res.status(201).json({success: false, error: error});
     }
+}
+
+module.exports.addContact = function (req, res) {
+    var data = {
+        userId: req.body.userId,
+        subject: req.body.subject,
+        message: req.body.message
+    }
+
+    var doc = ContactSchema.create(data, function (err, doc) {
+        if (err) {
+            return res.status(201).json({success: false})
+        }
+        res.status(201).json({success: true, doc: doc});
+    });
+    
 }

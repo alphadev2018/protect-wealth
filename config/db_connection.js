@@ -3,14 +3,12 @@ mongoose.Promise = global.Promise;
 
 mongoose.connect(process.env.MONGOURL, {
     useMongoClient: true,
-    autoIndex: false,
-    user: "admin",
-    password: "password"
+    autoIndex: false
     // other options 
 });
 
 const db_collections = [
-    "data_accounts", "data_courses", "data_activities"
+    "data_accounts", "data_courses", "data_activities", "data_contacts"
 ];
 
 mongoose.connection.once('open', function(){

@@ -121,4 +121,4 @@ app.get("*", function(req, res) {
 });
 
 // web server 8080
-app.listen(8888, () => console.log('-- [ PROTECTWEALTH NODE ] SERVER STARTED LISTENING ON PORT 8888 --'));
+app.listen(80, () => console.log('-- [ PROTECTWEALTH NODE ] SERVER STARTED LISTENING ON PORT 8888 --'));
