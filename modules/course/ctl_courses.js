@@ -25,6 +25,10 @@ async function getRecommend( userId, limit ) {
     }
   })
 
+  if (!quiz.length) {
+    quiz = courses;
+  }
+
   courses.map(course => {
     var common = intersect(quiz, course.quizs);
     if (!common.length) return;
